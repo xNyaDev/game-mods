@@ -1,0 +1,6 @@
+[workspace]
+resolver = "2"
+members = [
+    "xnya_modloader",
+    "xnya_rallytrophy_cryptutil",
+]
