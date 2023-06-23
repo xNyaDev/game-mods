@@ -1,0 +1,13 @@
+[package]
+name = "xnya_utils"
+version = "0.1.0"
+edition = "2021"
+authors = ["xNyaDev <xnyadev@pm.me>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/xNyaDev/game-mods/"
+homepage = "https://github.com/xNyaDev/game-mods/"
+publish = false
+
+[dependencies]
+serde = "1.0.164"
+toml = "0.7.4"

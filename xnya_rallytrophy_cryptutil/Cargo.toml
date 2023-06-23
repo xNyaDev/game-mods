@@ -16,3 +16,4 @@ bfstool = { default-features = false, git = "https://github.com/xNyaDev/bfstool.
 serde = { version = "1.0.164", features = ["derive"] }
 toml = "0.7.4"
 windows = { version = "0.48.0", features = ["Win32_System_SystemServices", "Win32_UI_WindowsAndMessaging", "Win32_Foundation"] }
+xnya_utils = { path = "../xnya_utils" }

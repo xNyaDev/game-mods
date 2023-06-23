@@ -1,9 +1,6 @@
 #![allow(clippy::missing_safety_doc)]
 
 use std::error::Error;
-use std::fs::File;
-use std::io::{Read, Write};
-use std::path::Path;
 use std::{ptr, slice};
 
 use serde::{Deserialize, Serialize};
@@ -20,26 +17,13 @@ struct Config {
 }
 
 unsafe fn main() -> Result<(), Box<dyn Error>> {
-    let mut config = if Path::new("xnya_rallytrophy_cryptutil.toml").exists() {
-        let mut file = File::open("xnya_rallytrophy_cryptutil.toml")?;
-        let mut contents = String::new();
-        file.read_to_string(&mut contents)?;
-        toml::from_str(&contents)?
-    } else {
-        Config {
-            dump_key: true,
-            disable_encryption: false,
-        }
-    };
+    let mut config = xnya_utils::read_toml("xnya_rallytrophy_cryptutil.toml")?.unwrap_or(Config {
+        dump_key: true,
+        disable_encryption: false,
+    });
     if config.dump_key {
-        let mut keys = if Path::new("Keys.toml").exists() {
-            let mut file = File::open("Keys.toml")?;
-            let mut contents = String::new();
-            file.read_to_string(&mut contents)?;
-            toml::from_str(&contents)?
-        } else {
-            bfstool::keys::Keys { bzf2001: None }
-        };
+        let mut keys =
+            xnya_utils::read_toml("Keys.toml")?.unwrap_or(bfstool::keys::Keys { bzf2001: None });
 
         let data = slice::from_raw_parts(0x501D10 as *const u8, 1024);
         let mut key = [0; 256];
@@ -53,15 +37,13 @@ unsafe fn main() -> Result<(), Box<dyn Error>> {
 
         keys.bzf2001 = Some(bfstool::keys::Bzf2001Keys { key });
 
-        let mut file = File::create("Keys.toml")?;
-        file.write_all(toml::to_string_pretty(&keys)?.as_bytes())?;
+        xnya_utils::write_toml("Keys.toml", &keys)?;
         config.dump_key = false;
     }
     if config.disable_encryption {
         ptr::write_bytes(0x501D10 as *mut u8, 0, 1024);
     }
-    let mut file = File::create("xnya_rallytrophy_cryptutil.toml")?;
-    file.write_all(toml::to_string_pretty(&config)?.as_bytes())?;
+    xnya_utils::write_toml("xnya_rallytrophy_cryptutil.toml", &config)?;
     Ok(())
 }
 
