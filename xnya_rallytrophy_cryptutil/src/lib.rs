@@ -17,7 +17,6 @@ use windows::Win32::UI::WindowsAndMessaging::{MessageBoxA, MB_ICONERROR};
 struct Config {
     pub dump_key: bool,
     pub disable_encryption: bool,
-    pub key: String,
 }
 
 unsafe fn main() -> Result<(), Box<dyn Error>> {
@@ -30,16 +29,32 @@ unsafe fn main() -> Result<(), Box<dyn Error>> {
         Config {
             dump_key: true,
             disable_encryption: false,
-            key: "".to_string(),
         }
     };
     if config.dump_key {
-        let mut result = String::new();
-        let key = slice::from_raw_parts(0x501D10 as *const u8, 1024);
-        key.iter().step_by(4).for_each(|value| {
-            result += &format!("{:02X}", value);
-        });
-        config.key = result;
+        let mut keys = if Path::new("Keys.toml").exists() {
+            let mut file = File::open("Keys.toml")?;
+            let mut contents = String::new();
+            file.read_to_string(&mut contents)?;
+            toml::from_str(&contents)?
+        } else {
+            bfstool::keys::Keys { bzf2001: None }
+        };
+
+        let data = slice::from_raw_parts(0x501D10 as *const u8, 1024);
+        let mut key = [0; 256];
+
+        data.iter()
+            .step_by(4)
+            .enumerate()
+            .for_each(|(index, value)| {
+                key[index] = *value;
+            });
+
+        keys.bzf2001 = Some(bfstool::keys::Bzf2001Keys { key });
+
+        let mut file = File::create("Keys.toml")?;
+        file.write_all(toml::to_string_pretty(&keys)?.as_bytes())?;
         config.dump_key = false;
     }
     if config.disable_encryption {
