@@ -25,6 +25,4 @@ named `xnya_modloader.asi` to be loaded by Ultimate ASI Loader into the game.
 Compatibility: Rally Trophy 1.01 EN/DE 
 
 This mod can dump the key from Rally Trophy and make the game run completely decrypted if so desired. Designed for use
-with [bfstool](https://github.com/xNyaDev/bfstool)<sup>1</sup>, exports the key in a compatible format.
-
-1. As of right now, bfstool has no decryption support, but it is planned for the near future.
+with [bfstool](https://github.com/xNyaDev/bfstool), exports the key in a compatible format.
