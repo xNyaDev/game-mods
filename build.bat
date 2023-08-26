@@ -7,15 +7,12 @@ if not exist target\Ultimate-ASI-Loader.zip (
     REM powershell -Command "Expand-Archive -LiteralPath 'target/Ultimate-ASI-Loader_x64.zip' -DestinationPath 'target/Ultimate-ASI-Loader_x64'"
 )
 
-cargo +nightly build --target=i686-pc-windows-msvc --release --package xnya_modloader
-REM cargo +nightly build --target=x86_64-pc-windows-msvc --release --package xnya_modloader
 cargo +nightly build --target=i686-pc-windows-msvc --release --package xnya_rallytrophy_cryptutil
 
 mkdir dist
 mkdir "dist\Rally Trophy"
 
 copy target\Ultimate-ASI-Loader\dinput8.dll "dist\Rally Trophy\version.dll"
-copy target\i686-pc-windows-msvc\release\xnya_modloader.dll "dist\Rally Trophy\xnya_modloader.asi"
-copy target\i686-pc-windows-msvc\release\xnya_rallytrophy_cryptutil.dll "dist\Rally Trophy"
+copy target\i686-pc-windows-msvc\release\xnya_rallytrophy_cryptutil.dll "dist\Rally Trophy\xnya_rallytrophy_cryptutil.asi"
 
 echo Build complete
