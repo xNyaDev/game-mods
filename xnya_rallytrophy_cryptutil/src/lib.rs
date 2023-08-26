@@ -3,24 +3,17 @@
 use std::error::Error;
 use std::{ptr, slice};
 
-use serde::{Deserialize, Serialize};
 use windows::core::PCSTR;
 use windows::s;
 use windows::Win32::Foundation::HWND;
 use windows::Win32::System::SystemServices::DLL_PROCESS_ATTACH;
 use windows::Win32::UI::WindowsAndMessaging::{MessageBoxA, MB_ICONERROR};
 
-#[derive(Serialize, Deserialize)]
-struct Config {
-    pub dump_key: bool,
-    pub disable_encryption: bool,
-}
+use xnya_utils::configs::xnya_rallytrophy_cryptutil::Config;
 
 unsafe fn main() -> Result<(), Box<dyn Error>> {
-    let mut config = xnya_utils::read_toml("xnya_rallytrophy_cryptutil.toml")?.unwrap_or(Config {
-        dump_key: true,
-        disable_encryption: false,
-    });
+    let mut config: Config =
+        xnya_utils::read_toml("xnya_rallytrophy_cryptutil.toml")?.unwrap_or_default();
     if config.dump_key {
         let mut keys =
             xnya_utils::read_toml("Keys.toml")?.unwrap_or(bfstool::keys::Keys { bzf2001: None });

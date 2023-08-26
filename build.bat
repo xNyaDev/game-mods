@@ -14,5 +14,6 @@ mkdir "dist\Rally Trophy"
 
 copy target\Ultimate-ASI-Loader\dinput8.dll "dist\Rally Trophy\version.dll"
 copy target\i686-pc-windows-msvc\release\xnya_rallytrophy_cryptutil.dll "dist\Rally Trophy\xnya_rallytrophy_cryptutil.asi"
+copy target\xnya_rallytrophy_cryptutil.toml "dist\Rally Trophy"
 
 echo Build complete
