@@ -3,8 +3,7 @@
 use std::error::Error;
 use std::{ptr, slice};
 
-use windows::core::PCSTR;
-use windows::s;
+use windows::core::{s, PCSTR};
 use windows::Win32::Foundation::HWND;
 use windows::Win32::System::SystemServices::DLL_PROCESS_ATTACH;
 use windows::Win32::UI::WindowsAndMessaging::{MessageBoxA, MB_ICONERROR};

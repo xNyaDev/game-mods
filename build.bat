@@ -1,9 +1,9 @@
 @echo off
 
 if not exist target\Ultimate-ASI-Loader.zip (
-    powershell -Command "& {(New-Object Net.WebClient).DownloadFile('https://github.com/ThirteenAG/Ultimate-ASI-Loader/releases/download/v4.92/Ultimate-ASI-Loader.zip', 'target/Ultimate-ASI-Loader.zip')}"
+    powershell -Command "& {(New-Object Net.WebClient).DownloadFile('https://github.com/ThirteenAG/Ultimate-ASI-Loader/releases/download/v5.2/Ultimate-ASI-Loader.zip', 'target/Ultimate-ASI-Loader.zip')}"
     powershell -Command "Expand-Archive -LiteralPath 'target/Ultimate-ASI-Loader.zip' -DestinationPath 'target/Ultimate-ASI-Loader'"
-    REM powershell -Command "& {(New-Object Net.WebClient).DownloadFile('https://github.com/ThirteenAG/Ultimate-ASI-Loader/releases/download/v4.92/Ultimate-ASI-Loader_x64.zip', 'target/Ultimate-ASI-Loader_x64.zip')}"
+    REM powershell -Command "& {(New-Object Net.WebClient).DownloadFile('https://github.com/ThirteenAG/Ultimate-ASI-Loader/releases/download/v5.2/Ultimate-ASI-Loader_x64.zip', 'target/Ultimate-ASI-Loader_x64.zip')}"
     REM powershell -Command "Expand-Archive -LiteralPath 'target/Ultimate-ASI-Loader_x64.zip' -DestinationPath 'target/Ultimate-ASI-Loader_x64'"
 )
 
