@@ -28,6 +28,7 @@ features = [
 
 [build-dependencies]
 tauri-winres = "0.1.1"
+vergen = { version = "8.2.5", features = ["build", "git", "gitoxide"] }
 
 [package.metadata.tauri-winres]
 OriginalFilename = "xnya_modloader.dll"

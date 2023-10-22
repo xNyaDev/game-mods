@@ -19,6 +19,7 @@ xnya_utils = { path = "../xnya_utils" }
 [build-dependencies]
 xnya_utils = { path = "../xnya_utils" }
 tauri-winres = "0.1.1"
+vergen = { version = "8.2.5", features = ["build", "git", "gitoxide"] }
 
 [package.metadata.tauri-winres]
 OriginalFilename = "xnya_rallytrophy_cryptutil.dll"
