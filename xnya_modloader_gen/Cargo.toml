@@ -1,0 +1,21 @@
+[package]
+name = "xnya_modloader_gen"
+version = "0.1.0"
+edition = "2021"
+authors = ["xNyaDev <xnyadev@pm.me>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/xNyaDev/game-mods/"
+homepage = "https://github.com/xNyaDev/game-mods/"
+publish = false
+
+[dependencies]
+copy_dir = "0.1.3"
+clap = { version = "4.4.6", features = ["derive"] }
+pelite = "0.10.0"
+
+[dependencies.windows]
+version = "0.51.1"
+features = [
+    "Win32_Foundation",
+    "Win32_System_SystemInformation"
+]

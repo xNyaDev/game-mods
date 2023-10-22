@@ -3,26 +3,29 @@
 This repo contains all of my native game mods written in Rust. 
 
 Game list:
- - Rally Trophy
+ - Rally Trophy - Patch 1.01 EN/DE
 
 ## Building instructions
 
-Rust nightly MSVC (both i686 and x86_64) is required to build. Cross-compilation or using the GNU compiler is not
-tested and might cause issues.
+Rust nightly MSVC (currently only i686) is required to build. Cross-compilation or using the GNU compiler is not
+supported and will cause issues - `xnya_modloader_gen` requires a Windows environment to read exports of proxied DLLs.
 
-Run `build.bat` to build all the mods. It will download [ThirteenAG's Ultimate ASI Loader](https://github.com/ThirteenAG/Ultimate-ASI-Loader)
-and configure it correctly for all the games. Ready packages will be placed in /dist, sorted by the game name.
+Run `build.bat` to build all the mods. Ready packages will be placed in /dist, sorted by the game name.
 
-# Mod list
+# Project list
 
-## xnya_modloader
+## xnya_modloader_gen and xnya_modloader_template
 
-Currently, only purpose of this mod is to load other mods. It will load all DLLs matching `xnya_*.dll` and should be
-named `xnya_modloader.asi` to be loaded by Ultimate ASI Loader into the game.
+xnya_modloader_gen creates a proxy DLL project by reading exports of a specified DLL and adding them to
+xnya_modloader_template where required. The resulting project is not compiled and can be customized further if desired.
 
 ## xnya_rallytrophy_cryptutil
 
-Compatibility: Rally Trophy 1.01 EN/DE 
+Game: Rally Trophy
 
 This mod can dump the key from Rally Trophy and make the game run completely decrypted if so desired. Designed for use
 with [bfstool](https://github.com/xNyaDev/bfstool), exports the key in a compatible format.
+
+## xnya_util
+
+Contains utilities like config formats or functions to read/write TOML files
