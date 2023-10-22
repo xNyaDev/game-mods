@@ -25,3 +25,12 @@ features = [
     "Win32_UI_WindowsAndMessaging",
     "Win32_Foundation"
 ]
+
+[build-dependencies]
+tauri-winres = "0.1.1"
+
+[package.metadata.tauri-winres]
+OriginalFilename = "xnya_modloader.dll"
+ProductName = "xnya_modloader"
+LegalCopyright = "Licensed under MIT or Apache-2.0, xNyaDev 2023"
+FileDescription = "https://github.com/xNyaDev/game-mods/"

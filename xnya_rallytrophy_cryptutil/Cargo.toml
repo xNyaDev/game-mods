@@ -18,3 +18,10 @@ xnya_utils = { path = "../xnya_utils" }
 
 [build-dependencies]
 xnya_utils = { path = "../xnya_utils" }
+tauri-winres = "0.1.1"
+
+[package.metadata.tauri-winres]
+OriginalFilename = "xnya_rallytrophy_cryptutil.dll"
+ProductName = "xnya_rallytrophy_cryptutil"
+LegalCopyright = "Licensed under MIT or Apache-2.0, xNyaDev 2023"
+FileDescription = "https://github.com/xNyaDev/game-mods/"

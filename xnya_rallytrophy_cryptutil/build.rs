@@ -11,5 +11,8 @@ fn main() -> Result<(), Box<dyn Error>> {
         ),
         &Config::default(),
     )?;
+
+    tauri_winres::WindowsResource::new().compile()?;
+
     Ok(())
 }
