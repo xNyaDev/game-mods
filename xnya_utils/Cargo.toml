@@ -9,5 +9,5 @@ homepage = "https://github.com/xNyaDev/game-mods/"
 publish = false
 
 [dependencies]
-serde = { version = "1.0.188", features = ["derive"] }
-toml = "0.7.6"
+serde = { version = "1.0.189", features = ["derive"] }
+toml = "0.8.2"
