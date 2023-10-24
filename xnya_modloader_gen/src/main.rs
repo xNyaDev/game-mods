@@ -51,6 +51,9 @@ fn main() {
 
     copy_dir::copy_dir("xnya_modloader_template", &args.out).unwrap();
 
+    let mut original_library_name = File::create(args.out.join("src/original_library_name.txt")).unwrap();
+    original_library_name.write_all(args.dll_file.as_bytes()).unwrap();
+
     let mut function_count = File::create(args.out.join("src/function_count.txt")).unwrap();
     function_count.write_all(exports.len().to_string().as_bytes()).unwrap();
 
