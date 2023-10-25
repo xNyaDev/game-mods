@@ -44,6 +44,7 @@ pub unsafe extern "system" fn DllMain(_: usize, call_reason: u32, _: usize) -> i
         let original_library = Path::new(
             String::from_utf8_lossy(&buffer).trim_matches(char::from(0))
         ).join(include_str!("original_library_name.txt"));
+        #[allow(unused_variables)]
         let original_library = LoadLibraryA(PCSTR::from_raw(
             original_library.to_string_lossy().to_string().as_ptr()
         )).unwrap();
