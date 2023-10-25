@@ -2,6 +2,7 @@ use std::env;
 use std::error::Error;
 
 use vergen::EmitBuilder;
+use xnya_utils::configs::xnya_modloader::Config;
 
 fn main() -> Result<(), Box<dyn Error>> {
     println!(
@@ -13,6 +14,14 @@ fn main() -> Result<(), Box<dyn Error>> {
     tauri_winres::WindowsResource::new()
         .set("ProductVersion", &env::var("VERGEN_GIT_SHA")?)
         .compile()?;
+
+    xnya_utils::write_toml(
+        &format!(
+            "{}/target/xnya_modloader.toml",
+            env::var("CARGO_MANIFEST_DIR").unwrap()
+        ),
+        &Config::default(),
+    )?;
 
     Ok(())
 }

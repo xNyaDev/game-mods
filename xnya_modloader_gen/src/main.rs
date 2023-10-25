@@ -1,11 +1,12 @@
 use std::fs;
 use std::fs::File;
-use std::io::Write;
+use std::io::{Read, Write};
 use std::path::PathBuf;
 
 use clap::Parser;
 use pelite::FileMap;
 use pelite::pe::{Pe, PeFile};
+use toml_edit::{Document, value};
 use windows::Win32::Foundation::MAX_PATH;
 use windows::Win32::System::SystemInformation::GetSystemDirectoryA;
 
@@ -81,4 +82,18 @@ fn main() {
     }
 
     load_original_functions.write_all(b"}\n").unwrap();
+
+    let mut cargo_toml = File::open(args.out.join("Cargo.toml")).unwrap();
+    let mut cargo_toml_contents = String::new();
+    cargo_toml.read_to_string(&mut cargo_toml_contents).unwrap();
+
+    let mut cargo_toml = cargo_toml_contents.parse::<Document>().unwrap();
+    let xnya_utils_path = fs::canonicalize("./xnya_utils").unwrap().to_string_lossy().to_string();
+    cargo_toml["dependencies"]["xnya_utils"]["path"] = value(&xnya_utils_path);
+    cargo_toml["build-dependencies"]["xnya_utils"]["path"] = value(&xnya_utils_path);
+    File::create(
+        args.out.join("Cargo.toml")
+    ).unwrap().write_all(
+        cargo_toml.to_string().as_bytes()
+    ).unwrap();
 }

@@ -14,12 +14,20 @@ use windows::Win32::System::SystemInformation::GetSystemDirectoryA;
 use windows::Win32::System::SystemServices::DLL_PROCESS_ATTACH;
 use windows::Win32::UI::WindowsAndMessaging::{MB_ICONERROR, MessageBoxA};
 
+use xnya_utils::configs::xnya_modloader::Config;
+
 unsafe fn main() -> Result<(), Box<dyn Error>> {
-    glob::glob("xnya_*.dll").unwrap().try_for_each(|result| {
-        let name = result.unwrap().to_string_lossy().to_string();
-        LoadLibraryA(PCSTR::from_raw(name.as_ptr()))?;
-        Ok::<(), Box<dyn Error>>(())
-    })?;
+    let config: Config =
+        xnya_utils::read_toml("xnya_modloader.toml")?.unwrap_or_default();
+
+    for load_path in config.load_paths {
+        glob::glob(&load_path).unwrap().try_for_each(|result| {
+            let name = result.unwrap().to_string_lossy().to_string();
+            LoadLibraryA(PCSTR::from_raw(name.as_ptr()))?;
+            Ok::<(), Box<dyn Error>>(())
+        })?;
+    }
+
     Ok(())
 }
 
@@ -45,7 +53,7 @@ pub unsafe extern "system" fn DllMain(_: usize, call_reason: u32, _: usize) -> i
             String::from_utf8_lossy(&buffer).trim_matches(char::from(0))
         ).join(include_str!("original_library_name.txt"));
         #[allow(unused_variables)]
-        let original_library = LoadLibraryA(PCSTR::from_raw(
+            let original_library = LoadLibraryA(PCSTR::from_raw(
             original_library.to_string_lossy().to_string().as_ptr()
         )).unwrap();
 
