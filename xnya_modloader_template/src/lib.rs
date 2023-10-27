@@ -4,11 +4,13 @@
 use std::arch::global_asm;
 use std::error::Error;
 use std::path::Path;
+use log::{error, info};
 
 use windows::core::{PCSTR, s};
 #[allow(unused_imports)]
 use windows::core::imp::GetProcAddress;
 use windows::Win32::Foundation::{HWND, MAX_PATH};
+use windows::Win32::System::Console::AllocConsole;
 use windows::Win32::System::LibraryLoader::LoadLibraryA;
 use windows::Win32::System::SystemInformation::GetSystemDirectoryA;
 use windows::Win32::System::SystemServices::DLL_PROCESS_ATTACH;
@@ -20,11 +22,35 @@ unsafe fn main() -> Result<(), Box<dyn Error>> {
     let config: Config =
         xnya_utils::read_toml("xnya_modloader.toml")?.unwrap_or_default();
 
+    if config.logging.enable_logging {
+        env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
+    }
+
+    if config.logging.alloc_console {
+        match AllocConsole() {
+            Ok(_) => {
+                info!("Allocated a new console")
+            }
+            Err(_) => {
+                error!("Failed allocating a new console");
+            }
+        }
+    }
+
     for load_path in config.load_paths {
         glob::glob(&load_path).unwrap().try_for_each(|result| {
             let name = result.unwrap().to_string_lossy().to_string();
-            LoadLibraryA(PCSTR::from_raw(name.as_ptr()))?;
-            Ok::<(), Box<dyn Error>>(())
+            info!("Loading {name}");
+            match LoadLibraryA(PCSTR::from_raw(name.as_ptr())) {
+                Ok(_) => {
+                    info!("Loaded {name}");
+                }
+                Err(e) => {
+                    error!("Failed while loading {name}: {e}");
+                    return Err(e);
+                }
+            }
+            Ok::<(), windows::core::Error>(())
         })?;
     }
 

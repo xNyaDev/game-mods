@@ -14,12 +14,15 @@ publish = false
 crate-type = ["cdylib"]
 
 [dependencies]
+env_logger = "0.10.0"
 glob = "0.3.1"
+log = "0.4.20"
 xnya_utils = { path = "../xnya_utils" }
 
 [dependencies.windows]
 version = "0.51.1"
 features = [
+    "Win32_System_Console",
     "Win32_System_LibraryLoader",
     "Win32_System_SystemInformation",
     "Win32_System_SystemServices",
