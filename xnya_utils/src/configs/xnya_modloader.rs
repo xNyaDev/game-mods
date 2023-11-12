@@ -1,9 +1,15 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Default, Serialize, Deserialize)]
 pub struct Config {
-    pub load_paths: Vec<String>,
+    pub loading: Loading,
     pub logging: Logging,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Loading {
+    pub load_paths: Vec<String>,
+    pub change_workdir: bool,
 }
 
 #[derive(Default, Serialize, Deserialize)]
@@ -12,13 +18,13 @@ pub struct Logging {
     pub alloc_console: bool,
 }
 
-impl Default for Config {
+impl Default for Loading {
     fn default() -> Self {
-        Config {
+        Loading {
             load_paths: vec![
                 "xnya_*.dll".to_string()
             ],
-            logging: Default::default(),
+            change_workdir: Default::default(),
         }
     }
 }

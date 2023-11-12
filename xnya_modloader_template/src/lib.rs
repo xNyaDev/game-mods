@@ -3,7 +3,7 @@
 
 use std::arch::global_asm;
 use std::error::Error;
-use std::mem;
+use std::{env, mem};
 use std::path::Path;
 
 use log::{error, info};
@@ -38,9 +38,18 @@ unsafe fn main() -> Result<(), Box<dyn Error>> {
         }
     }
 
-    for load_path in config.load_paths {
-        glob::glob(&load_path).unwrap().try_for_each(|result| {
-            let name = result.unwrap().to_string_lossy().to_string();
+    let starting_workdir = env::current_dir()?;
+
+    for load_path in config.loading.load_paths {
+        glob::glob(&load_path).unwrap().filter_map(Result::ok).try_for_each(|path| {
+            if config.loading.change_workdir {
+                let absolute_path = path.canonicalize()?;
+                let new_workdir = absolute_path.parent();
+                if let Some(workdir) = new_workdir {
+                    env::set_current_dir(workdir)?;
+                }
+            }
+            let name = path.to_string_lossy().to_string();
             info!("Loading {name}");
             match libloading::Library::new(&name) {
                 Ok(library) => {
@@ -61,6 +70,10 @@ unsafe fn main() -> Result<(), Box<dyn Error>> {
             }
             Ok::<(), Box<dyn Error>>(())
         })?;
+    }
+
+    if config.loading.change_workdir {
+        env::set_current_dir(starting_workdir)?;
     }
 
     Ok(())
