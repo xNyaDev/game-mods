@@ -1,0 +1,19 @@
+{
+ORIGINAL_FUNCTIONS[0] = GetProcAddress(original_library.0, s!("GetFileVersionInfoA").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[1] = GetProcAddress(original_library.0, s!("GetFileVersionInfoByHandle").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[2] = GetProcAddress(original_library.0, s!("GetFileVersionInfoExA").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[3] = GetProcAddress(original_library.0, s!("GetFileVersionInfoExW").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[4] = GetProcAddress(original_library.0, s!("GetFileVersionInfoSizeA").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[5] = GetProcAddress(original_library.0, s!("GetFileVersionInfoSizeExA").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[6] = GetProcAddress(original_library.0, s!("GetFileVersionInfoSizeExW").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[7] = GetProcAddress(original_library.0, s!("GetFileVersionInfoSizeW").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[8] = GetProcAddress(original_library.0, s!("GetFileVersionInfoW").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[9] = GetProcAddress(original_library.0, s!("VerFindFileA").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[10] = GetProcAddress(original_library.0, s!("VerFindFileW").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[11] = GetProcAddress(original_library.0, s!("VerInstallFileA").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[12] = GetProcAddress(original_library.0, s!("VerInstallFileW").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[13] = GetProcAddress(original_library.0, s!("VerLanguageNameA").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[14] = GetProcAddress(original_library.0, s!("VerLanguageNameW").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[15] = GetProcAddress(original_library.0, s!("VerQueryValueA").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[16] = GetProcAddress(original_library.0, s!("VerQueryValueW").0).unwrap() as usize;
+}
