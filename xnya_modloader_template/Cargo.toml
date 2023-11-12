@@ -16,6 +16,7 @@ crate-type = ["cdylib"]
 [dependencies]
 env_logger = "0.10.0"
 glob = "0.3.1"
+libloading = "0.8.1"
 log = "0.4.20"
 xnya_utils = { path = "../xnya_utils" }
 

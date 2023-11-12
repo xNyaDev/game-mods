@@ -3,9 +3,10 @@
 
 use std::arch::global_asm;
 use std::error::Error;
+use std::mem;
 use std::path::Path;
-use log::{error, info};
 
+use log::{error, info};
 use windows::core::{PCSTR, s};
 #[allow(unused_imports)]
 use windows::core::imp::GetProcAddress;
@@ -41,16 +42,24 @@ unsafe fn main() -> Result<(), Box<dyn Error>> {
         glob::glob(&load_path).unwrap().try_for_each(|result| {
             let name = result.unwrap().to_string_lossy().to_string();
             info!("Loading {name}");
-            match LoadLibraryA(PCSTR::from_raw(name.as_ptr())) {
-                Ok(_) => {
+            match libloading::Library::new(&name) {
+                Ok(library) => {
                     info!("Loaded {name}");
+                    mem::forget(library);
                 }
                 Err(e) => {
-                    error!("Failed while loading {name}: {e}");
-                    return Err(e);
+                    match e {
+                        libloading::Error::LoadLibraryExW { source } => {
+                            error!("Failed while loading {name}: LoadLibraryExW failed with error: {source:?}");
+                        }
+                        _ => {
+                            error!("Failed while loading {name}: {e}");
+                            Err(e)?
+                        }
+                    }
                 }
             }
-            Ok::<(), windows::core::Error>(())
+            Ok::<(), Box<dyn Error>>(())
         })?;
     }
 
@@ -78,8 +87,7 @@ pub unsafe extern "system" fn DllMain(_: usize, call_reason: u32, _: usize) -> i
         let original_library = Path::new(
             String::from_utf8_lossy(&buffer).trim_matches(char::from(0))
         ).join(include_str!("original_library_name.txt"));
-        #[allow(unused_variables)]
-            let original_library = LoadLibraryA(PCSTR::from_raw(
+        #[allow(unused_variables)] let original_library = LoadLibraryA(PCSTR::from_raw(
             original_library.to_string_lossy().to_string().as_ptr()
         )).unwrap();
 
