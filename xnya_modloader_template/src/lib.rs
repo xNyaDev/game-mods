@@ -1,9 +1,9 @@
 #![feature(naked_functions)]
 #![allow(clippy::missing_safety_doc)]
 
+use std::{env, mem};
 use std::arch::global_asm;
 use std::error::Error;
-use std::{env, mem};
 use std::path::Path;
 
 use log::{error, info};
@@ -23,19 +23,23 @@ unsafe fn main() -> Result<(), Box<dyn Error>> {
     let config: Config =
         xnya_utils::read_toml("xnya_modloader.toml")?.unwrap_or_default();
 
-    if config.logging.enable_logging {
-        env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
-    }
-
     if config.logging.alloc_console {
         match AllocConsole() {
             Ok(_) => {
+                if config.logging.enable_logging {
+                    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
+                }
                 info!("Allocated a new console")
             }
             Err(_) => {
+                if config.logging.enable_logging {
+                    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
+                }
                 error!("Failed allocating a new console");
             }
         }
+    } else if config.logging.enable_logging {
+        env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
     }
 
     let starting_workdir = env::current_dir()?;
