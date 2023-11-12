@@ -1,0 +1,24 @@
+[package]
+name = "xnya_console_enabler"
+version = "0.1.0"
+edition = "2021"
+authors = ["xNyaDev <xnyadev@pm.me>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/xNyaDev/game-mods/"
+homepage = "https://github.com/xNyaDev/game-mods/"
+publish = false
+
+[dependencies]
+clap = { version = "4.4.7", features = ["derive"] }
+memchr = "2.6.4"
+pelite = "0.10.0"
+
+[build-dependencies]
+tauri-winres = "0.1.1"
+vergen = { version = "8.2.5", features = ["build", "git", "gitoxide"] }
+
+[package.metadata.tauri-winres]
+OriginalFilename = "xnya_console_enabler.exe"
+ProductName = "xnya_console_enabler"
+LegalCopyright = "Licensed under MIT or Apache-2.0, xNyaDev 2023"
+FileDescription = "https://github.com/xNyaDev/game-mods/"

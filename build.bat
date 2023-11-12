@@ -6,10 +6,14 @@ cd target\xnya_modloader_version_i686
 cargo +nightly build --target=i686-pc-windows-msvc --release
 cd ..\..
 
+cargo +nightly build --target=x86_64-pc-windows-msvc --release --package xnya_console_enabler
+
 cargo +nightly build --target=i686-pc-windows-msvc --release --package xnya_rallytrophy_cryptutil
 
 mkdir dist
 mkdir "dist\Rally Trophy"
+
+copy target\x86_64-pc-windows-msvc\release\xnya_console_enabler.exe dist
 
 copy target\xnya_modloader_version_i686\target\i686-pc-windows-msvc\release\xnya_modloader.dll "dist\Rally Trophy\version.dll"
 copy target\xnya_modloader_version_i686\target\xnya_modloader.toml "dist\Rally Trophy"

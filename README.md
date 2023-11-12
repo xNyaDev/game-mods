@@ -7,12 +7,16 @@ Game list:
 
 ## Building instructions
 
-Rust nightly MSVC (currently only i686) is required to build. Cross-compilation or using the GNU compiler is not
+Rust nightly MSVC (i686 and x86_64) is required to build. Cross-compilation or using the GNU compiler is not
 supported and will cause issues - `xnya_modloader_gen` requires a Windows environment to read exports of proxied DLLs.
 
 Run `build.bat` to build all the mods. Ready packages will be placed in /dist, sorted by the game name.
 
 # Project list
+
+## xnya_console_enabler
+
+Tries to turn a GUI program into a console app by changing the PE header from Windows GUI into Windows Console.
 
 ## xnya_modloader_gen and xnya_modloader_template
 
