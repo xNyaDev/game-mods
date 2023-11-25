@@ -70,7 +70,7 @@ fn main() {
         #[cfg(target_pointer_width = "32")]
             let jump = format!("jmp ds:[_ORIGINAL_FUNCTIONS + {index} * 4]");
         #[cfg(target_pointer_width = "64")]
-            let jump = format!("jmp qword ptr [rip + _ORIGINAL_FUNCTIONS + {index} * 8]");
+            let jump = format!("jmp qword ptr [rip + ORIGINAL_FUNCTIONS + {index} * 8]");
 
         jumps.write_all(format!("{}{}\n", label, jump).as_bytes()).unwrap();
 

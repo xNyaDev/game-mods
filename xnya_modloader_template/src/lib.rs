@@ -92,7 +92,7 @@ pub static mut ORIGINAL_FUNCTIONS: [usize; include!("function_count.txt")] = [0;
 // .globl GetFileVersionInfoA
 // GetFileVersionInfoA:
 //     jmp ds:[_ORIGINAL_FUNCTIONS + 0 * 4] - For i686
-//     jmp qword ptr [rip + _ORIGINAL_FUNCTIONS + 0 * 8] - For x86_64
+//     jmp qword ptr [rip + ORIGINAL_FUNCTIONS + 0 * 8] - For x86_64
 global_asm!(include_str!("jumps.S"));
 
 #[no_mangle]
