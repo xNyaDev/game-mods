@@ -23,3 +23,7 @@ pub fn write_toml<T: serde::ser::Serialize>(name: &str, data: &T) -> Result<(), 
     file.write_all(toml::to_string_pretty(data)?.as_bytes())?;
     Ok(())
 }
+
+pub fn enable_logging() {
+    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
+}

@@ -26,19 +26,19 @@ unsafe fn main() -> Result<(), Box<dyn Error>> {
         match AllocConsole() {
             Ok(_) => {
                 if config.logging.enable_logging {
-                    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
+                    xnya_utils::enable_logging();
                 }
                 info!("Allocated a new console")
             }
             Err(_) => {
                 if config.logging.enable_logging {
-                    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
+                    xnya_utils::enable_logging();
                 }
                 error!("Failed allocating a new console");
             }
         }
     } else if config.logging.enable_logging {
-        env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
+        xnya_utils::enable_logging();
     }
 
     let starting_workdir = env::current_dir()?;
