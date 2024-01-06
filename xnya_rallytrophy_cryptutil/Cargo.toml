@@ -13,13 +13,13 @@ crate-type = ["cdylib"]
 
 [dependencies]
 bfstool = { default-features = false, git = "https://github.com/xNyaDev/bfstool.git", features = ["keys"] }
-windows = { version = "0.51.1", features = ["Win32_System_SystemServices", "Win32_UI_WindowsAndMessaging", "Win32_Foundation"] }
+windows = { version = "0.52.0", features = ["Win32_System_SystemServices", "Win32_UI_WindowsAndMessaging", "Win32_Foundation"] }
 xnya_utils = { path = "../xnya_utils" }
 
 [build-dependencies]
 xnya_utils = { path = "../xnya_utils" }
 tauri-winres = "0.1.1"
-vergen = { version = "8.2.5", features = ["build", "git", "gitoxide"] }
+vergen = { version = "8.2.6", features = ["build", "git", "gitoxide"] }
 
 [package.metadata.tauri-winres]
 OriginalFilename = "xnya_rallytrophy_cryptutil.dll"
