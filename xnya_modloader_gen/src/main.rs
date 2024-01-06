@@ -74,7 +74,7 @@ fn main() {
 
         jumps.write_all(format!("{}{}\n", label, jump).as_bytes()).unwrap();
 
-        let load_original = format!("ORIGINAL_FUNCTIONS[{index}] = GetProcAddress(original_library.0, s!(\"{export}\").0).unwrap() as usize;\n");
+        let load_original = format!("ORIGINAL_FUNCTIONS[{index}] = original_library.get::<unsafe extern fn()>(b\"{export}\\0\").unwrap().into_raw().unwrap() as usize;\n");
 
         load_original_functions.write_all(load_original.as_bytes()).unwrap();
 

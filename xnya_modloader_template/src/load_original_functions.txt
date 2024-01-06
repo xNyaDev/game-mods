@@ -1,19 +1,19 @@
 {
-ORIGINAL_FUNCTIONS[0] = GetProcAddress(original_library.0, s!("GetFileVersionInfoA").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[1] = GetProcAddress(original_library.0, s!("GetFileVersionInfoByHandle").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[2] = GetProcAddress(original_library.0, s!("GetFileVersionInfoExA").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[3] = GetProcAddress(original_library.0, s!("GetFileVersionInfoExW").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[4] = GetProcAddress(original_library.0, s!("GetFileVersionInfoSizeA").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[5] = GetProcAddress(original_library.0, s!("GetFileVersionInfoSizeExA").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[6] = GetProcAddress(original_library.0, s!("GetFileVersionInfoSizeExW").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[7] = GetProcAddress(original_library.0, s!("GetFileVersionInfoSizeW").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[8] = GetProcAddress(original_library.0, s!("GetFileVersionInfoW").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[9] = GetProcAddress(original_library.0, s!("VerFindFileA").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[10] = GetProcAddress(original_library.0, s!("VerFindFileW").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[11] = GetProcAddress(original_library.0, s!("VerInstallFileA").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[12] = GetProcAddress(original_library.0, s!("VerInstallFileW").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[13] = GetProcAddress(original_library.0, s!("VerLanguageNameA").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[14] = GetProcAddress(original_library.0, s!("VerLanguageNameW").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[15] = GetProcAddress(original_library.0, s!("VerQueryValueA").0).unwrap() as usize;
-ORIGINAL_FUNCTIONS[16] = GetProcAddress(original_library.0, s!("VerQueryValueW").0).unwrap() as usize;
+ORIGINAL_FUNCTIONS[0] = original_library.get::<unsafe extern fn()>(b"GetFileVersionInfoA\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[1] = original_library.get::<unsafe extern fn()>(b"GetFileVersionInfoByHandle\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[2] = original_library.get::<unsafe extern fn()>(b"GetFileVersionInfoExA\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[3] = original_library.get::<unsafe extern fn()>(b"GetFileVersionInfoExW\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[4] = original_library.get::<unsafe extern fn()>(b"GetFileVersionInfoSizeA\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[5] = original_library.get::<unsafe extern fn()>(b"GetFileVersionInfoSizeExA\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[6] = original_library.get::<unsafe extern fn()>(b"GetFileVersionInfoSizeExW\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[7] = original_library.get::<unsafe extern fn()>(b"GetFileVersionInfoSizeW\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[8] = original_library.get::<unsafe extern fn()>(b"GetFileVersionInfoW\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[9] = original_library.get::<unsafe extern fn()>(b"VerFindFileA\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[10] = original_library.get::<unsafe extern fn()>(b"VerFindFileW\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[11] = original_library.get::<unsafe extern fn()>(b"VerInstallFileA\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[12] = original_library.get::<unsafe extern fn()>(b"VerInstallFileW\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[13] = original_library.get::<unsafe extern fn()>(b"VerLanguageNameA\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[14] = original_library.get::<unsafe extern fn()>(b"VerLanguageNameW\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[15] = original_library.get::<unsafe extern fn()>(b"VerQueryValueA\0").unwrap().into_raw().unwrap() as usize;
+ORIGINAL_FUNCTIONS[16] = original_library.get::<unsafe extern fn()>(b"VerQueryValueW\0").unwrap().into_raw().unwrap() as usize;
 }
