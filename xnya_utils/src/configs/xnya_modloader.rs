@@ -10,6 +10,7 @@ pub struct Config {
 pub struct Loading {
     pub load_paths: Vec<String>,
     pub change_workdir: bool,
+    pub delayed_load: bool,
 }
 
 #[derive(Default, Serialize, Deserialize)]
@@ -24,7 +25,8 @@ impl Default for Loading {
             load_paths: vec![
                 "xnya_*.dll".to_string()
             ],
-            change_workdir: Default::default(),
+            change_workdir: false,
+            delayed_load: false,
         }
     }
 }
