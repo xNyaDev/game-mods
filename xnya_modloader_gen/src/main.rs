@@ -6,7 +6,7 @@ use std::path::PathBuf;
 use clap::Parser;
 use pelite::FileMap;
 use pelite::pe::{Pe, PeFile};
-use toml_edit::{Document, value};
+use toml_edit::{DocumentMut, value};
 use windows::Win32::Foundation::MAX_PATH;
 use windows::Win32::System::SystemInformation::GetSystemDirectoryA;
 
@@ -87,7 +87,7 @@ fn main() {
     let mut cargo_toml_contents = String::new();
     cargo_toml.read_to_string(&mut cargo_toml_contents).unwrap();
 
-    let mut cargo_toml = cargo_toml_contents.parse::<Document>().unwrap();
+    let mut cargo_toml = cargo_toml_contents.parse::<DocumentMut>().unwrap();
     let xnya_utils_path = fs::canonicalize("./xnya_utils").unwrap().to_string_lossy().to_string();
     cargo_toml["dependencies"]["xnya_utils"]["path"] = value(&xnya_utils_path);
     cargo_toml["build-dependencies"]["xnya_utils"]["path"] = value(&xnya_utils_path);
