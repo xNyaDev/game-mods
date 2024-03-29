@@ -24,6 +24,11 @@ pub fn write_toml<T: serde::ser::Serialize>(name: &str, data: &T) -> Result<(), 
     Ok(())
 }
 
-pub fn enable_logging() {
-    env_logger::Builder::from_env(env_logger::Env::default().default_filter_or("info")).init();
+pub fn enable_logging(disable_colors: bool) {
+    env_logger::Builder::from_env(
+        env_logger::Env::default()
+            .default_filter_or("info")
+            .default_write_style_or(if disable_colors { "never" } else { "auto" }),
+    )
+        .init();
 }

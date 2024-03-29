@@ -18,6 +18,7 @@ pub struct Loading {
 pub struct Logging {
     pub enable_logging: bool,
     pub alloc_console: bool,
+    pub disable_colors: bool,
 }
 
 impl Default for Loading {

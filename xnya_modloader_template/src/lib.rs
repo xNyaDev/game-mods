@@ -96,19 +96,19 @@ pub unsafe extern "system" fn DllMain(_: usize, call_reason: u32, _: usize) -> i
             match AllocConsole() {
                 Ok(_) => {
                     if config.logging.enable_logging {
-                        xnya_utils::enable_logging();
+                        xnya_utils::enable_logging(config.logging.disable_colors);
                     }
                     info!("Allocated a new console")
                 }
                 Err(_) => {
                     if config.logging.enable_logging {
-                        xnya_utils::enable_logging();
+                        xnya_utils::enable_logging(config.logging.disable_colors);
                     }
                     error!("Failed allocating a new console");
                 }
             }
         } else if config.logging.enable_logging {
-            xnya_utils::enable_logging();
+            xnya_utils::enable_logging(config.logging.disable_colors);
         }
 
         info!("xnya_modloader version: {}", env!("VERGEN_GIT_SHA"));
