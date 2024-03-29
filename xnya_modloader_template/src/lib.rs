@@ -37,9 +37,14 @@ unsafe fn main(config: Config) -> Result<(), Box<dyn Error>> {
         xnya_utils::enable_logging();
     }
 
+    info!("xnya_modloader version: {}", env!("VERGEN_GIT_SHA"));
+
+    info!("Starting load with {} glob entries", config.loading.load_paths.len());
+
     let starting_workdir = env::current_dir()?;
 
     for load_path in config.loading.load_paths {
+        info!("Resolving load glob \"{}\"", &load_path);
         glob::glob(&load_path).unwrap().filter_map(Result::ok).try_for_each(|path| {
             if config.loading.change_workdir {
                 let absolute_path = path.canonicalize()?;
