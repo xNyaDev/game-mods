@@ -25,34 +25,42 @@ unsafe fn main(config: Config) -> Result<(), Box<dyn Error>> {
 
     let starting_workdir = env::current_dir()?;
 
+    let mut loaded_mods = Vec::new();
+
     for load_path in config.loading.load_paths {
         info!("Resolving load glob \"{}\"", &load_path);
         glob::glob(&load_path).unwrap().filter_map(Result::ok).try_for_each(|path| {
-            if config.loading.change_workdir {
-                let absolute_path = path.canonicalize()?;
-                let new_workdir = absolute_path.parent();
-                if let Some(workdir) = new_workdir {
-                    env::set_current_dir(workdir)?;
-                }
-            }
             let name = path.to_string_lossy().to_string();
-            info!("Loading {name}");
-            match libloading::Library::new(&name) {
-                Ok(library) => {
-                    info!("Loaded {name}");
-                    mem::forget(library);
+            if loaded_mods.contains(&name) {
+                info!("Skipping load of {name} - Already loaded");
+            } else {
+                if config.loading.change_workdir {
+                    let absolute_path = path.canonicalize()?;
+                    let new_workdir = absolute_path.parent();
+                    if let Some(workdir) = new_workdir {
+                        env::set_current_dir(workdir)?;
+                    }
                 }
-                Err(e) => {
-                    match e {
-                        libloading::Error::LoadLibraryExW { source } => {
-                            error!("Failed while loading {name}: LoadLibraryExW failed with error: {source:?}");
-                        }
-                        _ => {
-                            error!("Failed while loading {name}: {e}");
-                            Err(e)?
+
+                info!("Loading {name}");
+                match libloading::Library::new(&name) {
+                    Ok(library) => {
+                        info!("Loaded {name}");
+                        mem::forget(library);
+                    }
+                    Err(e) => {
+                        match e {
+                            libloading::Error::LoadLibraryExW { source } => {
+                                error!("Failed while loading {name}: LoadLibraryExW failed with error: {source:?}");
+                            }
+                            _ => {
+                                error!("Failed while loading {name}: {e}");
+                                Err(e)?
+                            }
                         }
                     }
                 }
+                loaded_mods.push(name);
             }
             Ok::<(), Box<dyn Error>>(())
         })?;
