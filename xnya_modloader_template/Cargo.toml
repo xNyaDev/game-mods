@@ -38,5 +38,5 @@ xnya_utils = { path = "../xnya_utils" }
 [package.metadata.tauri-winres]
 OriginalFilename = "xnya_modloader.dll"
 ProductName = "xnya_modloader"
-LegalCopyright = "Licensed under MIT or Apache-2.0, xNyaDev 2023"
+LegalCopyright = "Licensed under MIT or Apache-2.0, xNyaDev 2023-2024"
 FileDescription = "https://github.com/xNyaDev/game-mods/"

@@ -24,5 +24,5 @@ vergen = { version = "8.2.6", features = ["build", "git", "gitoxide"] }
 [package.metadata.tauri-winres]
 OriginalFilename = "xnya_rallytrophy_cryptutil.dll"
 ProductName = "xnya_rallytrophy_cryptutil"
-LegalCopyright = "Licensed under MIT or Apache-2.0, xNyaDev 2023"
+LegalCopyright = "Licensed under MIT or Apache-2.0, xNyaDev 2023-2024"
 FileDescription = "https://github.com/xNyaDev/game-mods/"
