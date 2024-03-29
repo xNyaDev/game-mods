@@ -59,10 +59,9 @@ fn main() {
     function_count.write_all(exports.len().to_string().as_bytes()).unwrap();
 
     let mut jumps = File::create(args.out.join("src/jumps.S")).unwrap();
-    let mut load_original_functions = File::create(args.out.join("src/load_original_functions.txt")).unwrap();
+    let mut original_function_names = File::create(args.out.join("src/original_function_names.txt")).unwrap();
     let mut exports_def = File::create(args.out.join("exports.def")).unwrap();
 
-    load_original_functions.write_all(b"{\n").unwrap();
     exports_def.write_all(b"EXPORTS\n").unwrap();
 
     for (index, export) in exports.into_iter().enumerate() {
@@ -74,14 +73,9 @@ fn main() {
 
         jumps.write_all(format!("{}{}\n", label, jump).as_bytes()).unwrap();
 
-        let load_original = format!("ORIGINAL_FUNCTIONS[{index}] = original_library.get::<unsafe extern fn()>(b\"{export}\\0\").unwrap().into_raw().unwrap() as usize;\n");
-
-        load_original_functions.write_all(load_original.as_bytes()).unwrap();
-
+        original_function_names.write_all(format!("{export}\n").as_bytes()).unwrap();
         exports_def.write_all(format!("{export}\n").as_bytes()).unwrap();
     }
-
-    load_original_functions.write_all(b"}\n").unwrap();
 
     let mut cargo_toml = File::open(args.out.join("Cargo.toml")).unwrap();
     let mut cargo_toml_contents = String::new();

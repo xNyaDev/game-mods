@@ -11,6 +11,7 @@ pub struct Loading {
     pub load_paths: Vec<String>,
     pub change_workdir: bool,
     pub delayed_load: bool,
+    pub skip_missing_symbols: bool,
 }
 
 #[derive(Default, Serialize, Deserialize)]
@@ -27,6 +28,7 @@ impl Default for Loading {
             ],
             change_workdir: false,
             delayed_load: false,
+            skip_missing_symbols: false,
         }
     }
 }
