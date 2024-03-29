@@ -1,12 +1,12 @@
 #![allow(clippy::missing_safety_doc)]
 
-use std::error::Error;
 use std::{ptr, slice};
+use std::error::Error;
 
-use windows::core::{s, PCSTR};
+use windows::core::{PCSTR, s};
 use windows::Win32::Foundation::HWND;
 use windows::Win32::System::SystemServices::DLL_PROCESS_ATTACH;
-use windows::Win32::UI::WindowsAndMessaging::{MessageBoxA, MB_ICONERROR};
+use windows::Win32::UI::WindowsAndMessaging::{MB_ICONERROR, MessageBoxA};
 
 use xnya_utils::configs::xnya_rallytrophy_cryptutil::Config;
 
@@ -43,7 +43,7 @@ unsafe fn main() -> Result<(), Box<dyn Error>> {
 #[allow(non_snake_case)]
 pub unsafe extern "system" fn DllMain(_: usize, call_reason: u32, _: usize) -> i32 {
     if call_reason == DLL_PROCESS_ATTACH {
-        std::thread::spawn(|| match main() {
+        match main() {
             Ok(_) => {}
             Err(e) => {
                 MessageBoxA(
@@ -53,7 +53,7 @@ pub unsafe extern "system" fn DllMain(_: usize, call_reason: u32, _: usize) -> i
                     MB_ICONERROR,
                 );
             }
-        });
+        }
     }
     1
 }
