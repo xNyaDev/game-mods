@@ -3,7 +3,11 @@ use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
 
+pub use toml_comments::DocumentedStruct;
+pub use toml_comments::serialize_with_comments;
+
 pub mod configs;
+mod toml_comments;
 
 /// Read a toml document from a file
 pub fn read_toml<T: serde::de::DeserializeOwned>(name: &str) -> Result<Option<T>, Box<dyn Error>> {
@@ -21,6 +25,13 @@ pub fn read_toml<T: serde::de::DeserializeOwned>(name: &str) -> Result<Option<T>
 pub fn write_toml<T: serde::ser::Serialize>(name: &str, data: &T) -> Result<(), Box<dyn Error>> {
     let mut file = File::create(name)?;
     file.write_all(toml::to_string_pretty(data)?.as_bytes())?;
+    Ok(())
+}
+
+/// Write a toml document into a file, with comments
+pub fn write_toml_comments<T: serde::ser::Serialize + DocumentedStruct>(name: &str, data: &T) -> Result<(), Box<dyn Error>> {
+    let mut file = File::create(name)?;
+    file.write_all(serialize_with_comments(data)?.trim().as_bytes())?;
     Ok(())
 }
 
