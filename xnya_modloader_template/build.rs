@@ -8,7 +8,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         println!("cargo:rustc-cdylib-link-arg=/DEF:exports.def");
     }
     else {
-        println!("cargo:rustc-cdylib-link-arg=-Wl,--output-def=exports.def");
+        println!("cargo:rustc-cdylib-link-arg=exports.def");
     }
 
     tauri_winres::WindowsResource::new()

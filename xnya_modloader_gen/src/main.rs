@@ -79,15 +79,22 @@ fn main() {
     exports_def.write_all(b"EXPORTS\n").unwrap();
 
     for (index, export) in exports.into_iter().enumerate() {
-        let label = format!(".globl {export}\n{export}:\n    ");
         #[cfg(target_pointer_width = "32")]
-        let jump = format!("jmp ds:[_ORIGINAL_FUNCTIONS + {index} * 4]");
+        {
+            let label = format!(".globl _{export}\n_{export}:\n    ");
+            let jump = format!("jmp ds:[_ORIGINAL_FUNCTIONS + {index} * 4]");
+            jumps
+                .write_all(format!("{}{}\n", label, jump).as_bytes())
+                .unwrap();
+        }
         #[cfg(target_pointer_width = "64")]
-        let jump = format!("jmp qword ptr [rip + ORIGINAL_FUNCTIONS + {index} * 8]");
-
-        jumps
-            .write_all(format!("{}{}\n", label, jump).as_bytes())
-            .unwrap();
+        {   
+            let label = format!(".globl {export}\n{export}:\n    ");
+            let jump = format!("jmp qword ptr [rip + ORIGINAL_FUNCTIONS + {index} * 8]");
+            jumps
+                .write_all(format!("{}{}\n", label, jump).as_bytes())
+                .unwrap();
+        }
 
         original_function_names
             .write_all(format!("{export}\n").as_bytes())
