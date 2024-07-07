@@ -7,10 +7,23 @@ Game list:
 
 ## Building instructions
 
-Rust nightly MSVC (i686 and x86_64) is required to build. Cross-compilation or using the GNU compiler is not
-supported and will cause issues - `xnya_modloader_gen` requires a Windows environment to read exports of proxied DLLs.
+### Windows (native)
 
-Run `build.bat` to build all the mods. Ready packages will be placed in /dist, sorted by the game name.
+Rust nightly MSVC (i686 and x86_64) is required to build.
+
+Run `build.bat` to build all the mods. 
+
+Ready packages will be placed in /dist, sorted by the game name.
+
+### Linux (cross)
+
+A working `cross-rs` and Wine setup is required to build.
+
+Install on Arch Linux: `paru -S cross-git podman mingw-w64-gcc wine`
+
+Run `build.sh` to build all the mods.
+
+Ready packages will be placed in /dist, sorted by the game name.
 
 # Project list
 
