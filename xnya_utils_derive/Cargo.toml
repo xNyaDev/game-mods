@@ -1,5 +1,5 @@
 [package]
-name = "xnya_utils"
+name = "xnya_utils_derive"
 version = "0.1.0"
 edition = "2021"
 authors = ["xNyaDev <xnyadev@pm.me>"]
@@ -8,10 +8,9 @@ repository = "https://github.com/xNyaDev/game-mods/"
 homepage = "https://github.com/xNyaDev/game-mods/"
 publish = false
 
+[lib]
+proc-macro = true
+
 [dependencies]
-documented = "0.5.0"
-env_logger = "0.11.3"
-serde = { version = "1.0.204", features = ["derive"] }
-toml = "0.8.14"
-toml_edit = "0.22.14"
-xnya_utils_derive = { path = "../xnya_utils_derive" }
+quote = "1.0.36"
+syn = "2.0.69"

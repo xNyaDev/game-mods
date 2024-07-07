@@ -1,7 +1,6 @@
 use documented::DocumentedFields;
 use serde::{Deserialize, Serialize};
-
-use crate::DocumentedStruct;
+use crate::{DocumentedStruct, TypedFields};
 
 impl DocumentedStruct for Config {
     fn get_doc_string(location: &str, field: &str) -> Option<&'static str> {
@@ -12,9 +11,18 @@ impl DocumentedStruct for Config {
             _ => None,
         }
     }
+
+    fn get_type_string(location: &str, field: &str) -> Option<&'static str> {
+        match location {
+            "" => Config::get_field_type(field),
+            "loading" => Loading::get_field_type(field),
+            "logging" => Logging::get_field_type(field),
+            _ => None,
+        }
+    }
 }
 
-#[derive(Default, DocumentedFields, Serialize, Deserialize)]
+#[derive(Default, DocumentedFields, Serialize, Deserialize, TypedFields)]
 pub struct Config {
     /// Options related to loading DLLs
     pub loading: Loading,
@@ -22,7 +30,7 @@ pub struct Config {
     pub logging: Logging,
 }
 
-#[derive(DocumentedFields, Serialize, Deserialize)]
+#[derive(DocumentedFields, Serialize, Deserialize, TypedFields)]
 pub struct Loading {
     /// A list of files to load. Unix shell style patterns are supported
     pub load_paths: Vec<String>,
@@ -45,7 +53,7 @@ pub struct Loading {
     pub skip_missing_symbols: bool,
 }
 
-#[derive(Default, DocumentedFields, Serialize, Deserialize)]
+#[derive(Default, DocumentedFields, Serialize, Deserialize, TypedFields)]
 pub struct Logging {
     /// Enable logging what is being loaded
     pub enable_logging: bool,

@@ -3,8 +3,8 @@ use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
 
-pub use toml_comments::serialize_with_comments;
-pub use toml_comments::DocumentedStruct;
+pub use toml_comments::{serialize_with_comments, DocumentedStruct, TypedFields};
+pub use xnya_utils_derive::TypedFields;
 
 pub mod configs;
 mod toml_comments;
