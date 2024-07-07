@@ -1,12 +1,12 @@
 #![allow(clippy::missing_safety_doc)]
 
-use std::{ptr, slice};
 use std::error::Error;
+use std::{ptr, slice};
 
-use windows::core::{PCSTR, s};
+use windows::core::{s, PCSTR};
 use windows::Win32::Foundation::HWND;
 use windows::Win32::System::SystemServices::DLL_PROCESS_ATTACH;
-use windows::Win32::UI::WindowsAndMessaging::{MB_ICONERROR, MessageBoxA};
+use windows::Win32::UI::WindowsAndMessaging::{MessageBoxA, MB_ICONERROR};
 
 use xnya_utils::configs::xnya_rallytrophy_cryptutil::Config;
 

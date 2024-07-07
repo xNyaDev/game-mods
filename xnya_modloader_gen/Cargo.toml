@@ -20,3 +20,6 @@ features = [
     "Win32_Foundation",
     "Win32_System_SystemInformation"
 ]
+
+[build-dependencies]
+vergen = { version = "8.3.1", features = ["build", "git", "gitoxide"] }

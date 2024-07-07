@@ -119,7 +119,7 @@ pub unsafe extern "system" fn DllMain(_: usize, call_reason: u32, _: usize) -> i
             xnya_utils::enable_logging(config.logging.disable_colors);
         }
 
-        info!("xnya_modloader version: {}", env!("VERGEN_GIT_SHA"));
+        info!("xnya_modloader version: {}", include_str!("version.txt"));
 
         info!("Loading original library");
 

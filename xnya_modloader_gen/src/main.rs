@@ -4,9 +4,9 @@ use std::io::{Read, Write};
 use std::path::PathBuf;
 
 use clap::Parser;
-use pelite::FileMap;
 use pelite::pe::{Pe, PeFile};
-use toml_edit::{DocumentMut, value};
+use pelite::FileMap;
+use toml_edit::{value, DocumentMut};
 use windows::Win32::Foundation::MAX_PATH;
 use windows::Win32::System::SystemInformation::GetSystemDirectoryA;
 
@@ -18,6 +18,9 @@ struct Args {
     /// Output directory in which to place the resulting project
     #[arg(short, long)]
     out: PathBuf,
+    /// Use this when cross-compiling
+    #[arg(short, long)]
+    wine: bool,
 }
 
 fn main() {
@@ -36,12 +39,17 @@ fn main() {
     let file_map = FileMap::open(&original_library).unwrap();
     let pe_file = PeFile::from_bytes(file_map.as_ref()).unwrap();
 
-    let exports = pe_file.exports().unwrap().by().unwrap().iter_names().filter_map(|(name, _)| {
-        match name {
+    let exports = pe_file
+        .exports()
+        .unwrap()
+        .by()
+        .unwrap()
+        .iter_names()
+        .filter_map(|(name, _)| match name {
             Ok(name) => Some(name.to_string()),
-            Err(_) => None
-        }
-    }).collect::<Vec<String>>();
+            Err(_) => None,
+        })
+        .collect::<Vec<String>>();
 
     match args.out.parent() {
         None => {}
@@ -52,14 +60,20 @@ fn main() {
 
     copy_dir::copy_dir("xnya_modloader_template", &args.out).unwrap();
 
-    let mut original_library_name = File::create(args.out.join("src/original_library_name.txt")).unwrap();
-    original_library_name.write_all(args.dll_file.as_bytes()).unwrap();
+    let mut original_library_name =
+        File::create(args.out.join("src/original_library_name.txt")).unwrap();
+    original_library_name
+        .write_all(args.dll_file.as_bytes())
+        .unwrap();
 
     let mut function_count = File::create(args.out.join("src/function_count.txt")).unwrap();
-    function_count.write_all(exports.len().to_string().as_bytes()).unwrap();
+    function_count
+        .write_all(exports.len().to_string().as_bytes())
+        .unwrap();
 
     let mut jumps = File::create(args.out.join("src/jumps.S")).unwrap();
-    let mut original_function_names = File::create(args.out.join("src/original_function_names.txt")).unwrap();
+    let mut original_function_names =
+        File::create(args.out.join("src/original_function_names.txt")).unwrap();
     let mut exports_def = File::create(args.out.join("exports.def")).unwrap();
 
     exports_def.write_all(b"EXPORTS\n").unwrap();
@@ -67,14 +81,20 @@ fn main() {
     for (index, export) in exports.into_iter().enumerate() {
         let label = format!(".globl {export}\n{export}:\n    ");
         #[cfg(target_pointer_width = "32")]
-            let jump = format!("jmp ds:[_ORIGINAL_FUNCTIONS + {index} * 4]");
+        let jump = format!("jmp ds:[_ORIGINAL_FUNCTIONS + {index} * 4]");
         #[cfg(target_pointer_width = "64")]
-            let jump = format!("jmp qword ptr [rip + ORIGINAL_FUNCTIONS + {index} * 8]");
+        let jump = format!("jmp qword ptr [rip + ORIGINAL_FUNCTIONS + {index} * 8]");
 
-        jumps.write_all(format!("{}{}\n", label, jump).as_bytes()).unwrap();
+        jumps
+            .write_all(format!("{}{}\n", label, jump).as_bytes())
+            .unwrap();
 
-        original_function_names.write_all(format!("{export}\n").as_bytes()).unwrap();
-        exports_def.write_all(format!("{export}\n").as_bytes()).unwrap();
+        original_function_names
+            .write_all(format!("{export}\n").as_bytes())
+            .unwrap();
+        exports_def
+            .write_all(format!("{export}\n").as_bytes())
+            .unwrap();
     }
 
     let mut cargo_toml = File::open(args.out.join("Cargo.toml")).unwrap();
@@ -82,12 +102,29 @@ fn main() {
     cargo_toml.read_to_string(&mut cargo_toml_contents).unwrap();
 
     let mut cargo_toml = cargo_toml_contents.parse::<DocumentMut>().unwrap();
-    let xnya_utils_path = fs::canonicalize("./xnya_utils").unwrap().to_string_lossy().to_string();
+    let xnya_utils_path = fs::canonicalize("./xnya_utils")
+        .unwrap()
+        .to_string_lossy()
+        .to_string();
+
+    let xnya_utils_path = if args.wine {
+        xnya_utils_path.replace("\\\\?\\Z:", "").replace("\\", "/")
+    } else {
+        xnya_utils_path
+    };
+
     cargo_toml["dependencies"]["xnya_utils"]["path"] = value(&xnya_utils_path);
     cargo_toml["build-dependencies"]["xnya_utils"]["path"] = value(&xnya_utils_path);
-    File::create(
-        args.out.join("Cargo.toml")
-    ).unwrap().write_all(
-        cargo_toml.to_string().as_bytes()
-    ).unwrap();
+    cargo_toml["package"]["metadata"]["tauri-winres"]["ProductVersion"] =
+        value(env!("VERGEN_GIT_SHA"));
+
+    File::create(args.out.join("Cargo.toml"))
+        .unwrap()
+        .write_all(cargo_toml.to_string().as_bytes())
+        .unwrap();
+
+    File::create(args.out.join("src/version.txt"))
+        .unwrap()
+        .write_all(env!("VERGEN_GIT_SHA").as_bytes())
+        .unwrap();
 }

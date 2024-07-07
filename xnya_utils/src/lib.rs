@@ -3,8 +3,8 @@ use std::fs::File;
 use std::io::{Read, Write};
 use std::path::Path;
 
-pub use toml_comments::DocumentedStruct;
 pub use toml_comments::serialize_with_comments;
+pub use toml_comments::DocumentedStruct;
 
 pub mod configs;
 mod toml_comments;
@@ -29,7 +29,10 @@ pub fn write_toml<T: serde::ser::Serialize>(name: &str, data: &T) -> Result<(), 
 }
 
 /// Write a toml document into a file, with comments
-pub fn write_toml_comments<T: serde::ser::Serialize + DocumentedStruct>(name: &str, data: &T) -> Result<(), Box<dyn Error>> {
+pub fn write_toml_comments<T: serde::ser::Serialize + DocumentedStruct>(
+    name: &str,
+    data: &T,
+) -> Result<(), Box<dyn Error>> {
     let mut file = File::create(name)?;
     file.write_all(serialize_with_comments(data)?.trim().as_bytes())?;
     Ok(())
@@ -41,5 +44,5 @@ pub fn enable_logging(disable_colors: bool) {
             .default_filter_or("info")
             .default_write_style_or(if disable_colors { "never" } else { "auto" }),
     )
-        .init();
+    .init();
 }

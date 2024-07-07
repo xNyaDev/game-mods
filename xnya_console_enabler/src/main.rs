@@ -1,12 +1,14 @@
 use std::error::Error;
-use std::{mem, slice};
 use std::fs::File;
 use std::io::{Read, Write};
 use std::path::PathBuf;
+use std::{mem, slice};
 
 use clap::Parser;
 use memchr::memmem;
-use pelite::image::{IMAGE_OPTIONAL_HEADER32, IMAGE_OPTIONAL_HEADER64, IMAGE_SUBSYSTEM_WINDOWS_CUI};
+use pelite::image::{
+    IMAGE_OPTIONAL_HEADER32, IMAGE_OPTIONAL_HEADER64, IMAGE_SUBSYSTEM_WINDOWS_CUI,
+};
 use pelite::Wrap;
 
 #[derive(Parser)]
@@ -22,7 +24,9 @@ struct Args {
 fn main() -> Result<(), Box<dyn Error>> {
     let args = Args::parse();
 
-    let output = args.output.unwrap_or(format!("{}.console.exe", args.input.to_string_lossy()).into());
+    let output = args
+        .output
+        .unwrap_or(format!("{}.console.exe", args.input.to_string_lossy()).into());
 
     let file_map = pelite::FileMap::open(&args.input)?;
     let image = pelite::PeFile::from_bytes(file_map.as_ref())?;
@@ -30,23 +34,49 @@ fn main() -> Result<(), Box<dyn Error>> {
     let (data, new_data): (Vec<u8>, Vec<u8>) = match image.optional_header() {
         Wrap::T32(optional_header) => {
             let data = *optional_header;
-            let new_data = IMAGE_OPTIONAL_HEADER32 { Subsystem: IMAGE_SUBSYSTEM_WINDOWS_CUI, ..data};
+            let new_data = IMAGE_OPTIONAL_HEADER32 {
+                Subsystem: IMAGE_SUBSYSTEM_WINDOWS_CUI,
+                ..data
+            };
 
             let data_size = mem::size_of::<IMAGE_OPTIONAL_HEADER32>();
 
-            let data = unsafe {slice::from_raw_parts(&data as *const IMAGE_OPTIONAL_HEADER32 as *const u8, data_size)};
-            let new_data = unsafe {slice::from_raw_parts(&new_data as *const IMAGE_OPTIONAL_HEADER32 as *const u8, data_size)};
+            let data = unsafe {
+                slice::from_raw_parts(
+                    &data as *const IMAGE_OPTIONAL_HEADER32 as *const u8,
+                    data_size,
+                )
+            };
+            let new_data = unsafe {
+                slice::from_raw_parts(
+                    &new_data as *const IMAGE_OPTIONAL_HEADER32 as *const u8,
+                    data_size,
+                )
+            };
 
             (data.to_vec(), new_data.to_vec())
         }
         Wrap::T64(optional_header) => {
             let data = *optional_header;
-            let new_data = IMAGE_OPTIONAL_HEADER64 { Subsystem: IMAGE_SUBSYSTEM_WINDOWS_CUI, ..data};
+            let new_data = IMAGE_OPTIONAL_HEADER64 {
+                Subsystem: IMAGE_SUBSYSTEM_WINDOWS_CUI,
+                ..data
+            };
 
             let data_size = mem::size_of::<IMAGE_OPTIONAL_HEADER64>();
 
-            let data = unsafe {slice::from_raw_parts(&data as *const IMAGE_OPTIONAL_HEADER64 as *const u8, data_size)};
-            let new_data = unsafe {slice::from_raw_parts(&new_data as *const IMAGE_OPTIONAL_HEADER64 as *const u8, data_size)};
+            let data = unsafe {
+                slice::from_raw_parts(
+                    &data as *const IMAGE_OPTIONAL_HEADER64 as *const u8,
+                    data_size,
+                )
+            };
+            let new_data = unsafe {
+                slice::from_raw_parts(
+                    &new_data as *const IMAGE_OPTIONAL_HEADER64 as *const u8,
+                    data_size,
+                )
+            };
 
             (data.to_vec(), new_data.to_vec())
         }

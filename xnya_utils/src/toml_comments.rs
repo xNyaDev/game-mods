@@ -6,7 +6,9 @@ pub trait DocumentedStruct {
     fn get_doc_string(location: &str, field: &str) -> Option<&'static str>;
 }
 
-pub fn serialize_with_comments<T: serde::Serialize + DocumentedStruct>(data: &T) -> Result<String, Box<dyn Error>> {
+pub fn serialize_with_comments<T: serde::Serialize + DocumentedStruct>(
+    data: &T,
+) -> Result<String, Box<dyn Error>> {
     let mut document = toml::to_string_pretty(data)?.parse::<DocumentMut>()?;
 
     comment_table::<T>(document.as_table_mut(), "", T::get_doc_string);
@@ -14,7 +16,11 @@ pub fn serialize_with_comments<T: serde::Serialize + DocumentedStruct>(data: &T)
     Ok(document.to_string())
 }
 
-fn comment_table<T: DocumentedStruct>(table: &mut toml_edit::Table, location: &str, get_doc_string: fn(&str, &str) -> Option<&'static str>) {
+fn comment_table<T: DocumentedStruct>(
+    table: &mut toml_edit::Table,
+    location: &str,
+    get_doc_string: fn(&str, &str) -> Option<&'static str>,
+) {
     for (mut key, value) in table.iter_mut() {
         let key_name = key.get().to_owned();
 
