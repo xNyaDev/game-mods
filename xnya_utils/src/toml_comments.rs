@@ -6,9 +6,14 @@ pub trait TypedFields {
     fn get_field_type(field: &str) -> Option<&'static str>;
 }
 
+pub trait ReflectionFields {
+    fn get_field_value(&self, field: &str) -> Option<String>;
+}
+
 pub trait DocumentedStruct {
     fn get_doc_string(location: &str, field: &str) -> Option<&'static str>;
     fn get_type_string(location: &str, field: &str) -> Option<&'static str>;
+    fn get_default_string(location: &str, field: &str) -> Option<String>;
 }
 
 pub fn serialize_with_comments<T: serde::Serialize + DocumentedStruct>(
@@ -21,20 +26,26 @@ pub fn serialize_with_comments<T: serde::Serialize + DocumentedStruct>(
     Ok(document.to_string())
 }
 
-fn comment_table<T: DocumentedStruct>(
-    table: &mut toml_edit::Table,
-    location: &str,
-) {
+fn comment_table<T: DocumentedStruct>(table: &mut toml_edit::Table, location: &str) {
     for (mut key, value) in table.iter_mut() {
         let key_name = key.get().to_owned();
 
         let doc_string = T::get_doc_string(location, &key_name).unwrap_or_default();
-        let type_string = T::get_type_string(location, &key_name).unwrap_or_default().replace(" ", "");
+        let type_string = T::get_type_string(location, &key_name)
+            .unwrap_or_default()
+            .replace(" ", "");
+        let default_string = T::get_default_string(location, &key_name).unwrap_or_default();
 
         match value.as_table_mut() {
             None => {
                 let decor = key.leaf_decor_mut();
-                decor.set_prefix(doc_string_to_comment("\n", doc_string) + &format!("# Type: {}\n", type_string));
+                decor.set_prefix(
+                    doc_string_to_comment("\n", doc_string)
+                        + &format!(
+                            "# Type: {}\n# Default value: {}\n",
+                            type_string, default_string
+                        ),
+                );
             }
             Some(table) => {
                 let decor = table.decor_mut();
@@ -60,10 +71,10 @@ fn doc_string_to_comment(prefix: &str, doc_string: &str) -> String {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+    use crate::{ReflectionFields, TypedFields};
     use documented::DocumentedFields;
     use serde::Serialize;
-    use crate::TypedFields;
-    use super::*;
 
     impl DocumentedStruct for TestStruct1 {
         fn get_doc_string(location: &str, field: &str) -> Option<&'static str> {
@@ -81,9 +92,16 @@ mod tests {
                 _ => None,
             }
         }
+        fn get_default_string(location: &str, field: &str) -> Option<String> {
+            match location {
+                "" => TestStruct1::default().get_field_value(field),
+                "table" => TestStruct2::default().get_field_value(field),
+                _ => None,
+            }
+        }
     }
 
-    #[derive(Default, DocumentedFields, Serialize, TypedFields)]
+    #[derive(Debug, Default, DocumentedFields, Serialize, TypedFields, ReflectionFields)]
     pub struct TestStruct1 {
         /// Some comment
         pub value: bool,
@@ -91,7 +109,7 @@ mod tests {
         pub table: TestStruct2,
     }
 
-    #[derive(Default, DocumentedFields, Serialize, TypedFields)]
+    #[derive(Debug, Default, DocumentedFields, Serialize, TypedFields, ReflectionFields)]
     pub struct TestStruct2 {
         /// Some other comment
         ///
@@ -109,6 +127,7 @@ mod tests {
 
         let expected = r#"## Some comment
 # Type: bool
+# Default value: false
 value = false
 
 
@@ -119,10 +138,12 @@ value = false
 ##
 ## Multiline too
 # Type: bool
+# Default value: false
 value = false
 
 ## More values
 # Type: bool
+# Default value: false
 value2 = false"#;
 
         assert_eq!(actual.trim(), expected);
