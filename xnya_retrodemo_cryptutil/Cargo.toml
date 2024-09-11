@@ -1,0 +1,29 @@
+[package]
+name = "xnya_retrodemo_cryptutil"
+version = "0.1.0"
+edition = "2021"
+authors = ["xNyaDev <xnyadev@pm.me>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/xNyaDev/game-mods/"
+homepage = "https://github.com/xNyaDev/game-mods/"
+publish = false
+
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+bfstool = { default-features = false, git = "https://github.com/xNyaDev/bfstool.git", features = ["keys"] }
+minhook = "0.6.0"
+windows = { version = "0.58.0", features = ["Win32_System_SystemServices", "Win32_UI_WindowsAndMessaging", "Win32_Foundation"] }
+xnya_utils = { path = "../xnya_utils" }
+
+[build-dependencies]
+xnya_utils = { path = "../xnya_utils" }
+tauri-winres = "0.1.1"
+vergen = { version = "8.3.1", features = ["build", "git", "gitoxide"] }
+
+[package.metadata.tauri-winres]
+OriginalFilename = "xnya_retrodemo_cryptutil.dll"
+ProductName = "xnya_retrodemo_cryptutil"
+LegalCopyright = "Licensed under MIT or Apache-2.0, xNyaDev 2023-2024"
+FileDescription = "https://github.com/xNyaDev/game-mods/"

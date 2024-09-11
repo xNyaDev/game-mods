@@ -4,6 +4,7 @@ members = [
     "xnya_console_enabler",
     "xnya_modloader_gen",
     "xnya_rallytrophy_cryptutil",
+    "xnya_retrodemo_cryptutil",
     "xnya_utils",
     "xnya_utils_derive",
 ]

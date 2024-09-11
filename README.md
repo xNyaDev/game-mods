@@ -4,6 +4,7 @@ This repo contains all of my native game mods written in Rust.
 
 Game list:
  - Rally Trophy - Patch 1.01 EN/DE
+ - Bugbear Retro Demo 2002
 
 ## Building instructions
 
@@ -42,6 +43,13 @@ Game: Rally Trophy
 
 This mod can dump the key from Rally Trophy and make the game run completely decrypted if so desired. Designed for use
 with [bfstool](https://github.com/xNyaDev/bfstool), exports the key in a compatible format.
+
+## xnya_retrodemo_cryptutil
+
+Game: Bugbear Retro Demo 2002
+
+This mod can dump the key from Bugbear Retro Demo 2002 and make the game run completely decrypted if so desired. 
+Designed for use with [bfstool](https://github.com/xNyaDev/bfstool), exports the key in a compatible format.
 
 ## xnya_util
 
